@@ -1,0 +1,62 @@
+type: vertical-stack
+cards:
+  - type: custom:mushroom-title-card
+    title: ⏱️ Ultimate Timer V4
+    subtitle: Control & Status
+
+  - type: horizontal-stack
+    cards:
+      - type: custom:mushroom-entity-card
+        entity: input_boolean.pool_timer_start
+        name: Start
+        icon: mdi:play
+        tap_action:
+          action: toggle
+
+      - type: custom:mushroom-entity-card
+        entity: input_boolean.pool_timer_stop
+        name: Stop
+        icon: mdi:stop
+        tap_action:
+          action: toggle
+
+  - type: horizontal-stack
+    cards:
+      - type: custom:mushroom-template-card
+        primary: Running
+        secondary: >
+          {{ 'Active' if is_state('input_boolean.pool_timer_running','on') else 'Idle' }}
+        icon: mdi:progress-clock
+        icon_color: >
+          {{ 'green' if is_state('input_boolean.pool_timer_running','on') else 'grey' }}
+
+      - type: custom:mushroom-template-card
+        primary: Done
+        secondary: >
+          {{ 'Finished' if is_state('input_boolean.pool_timer_done','on') else 'Waiting' }}
+        icon: mdi:check-circle
+        icon_color: >
+          {{ 'green' if is_state('input_boolean.pool_timer_done','on') else 'grey' }}
+
+  - type: custom:mushroom-entity-card
+    entity: sensor.timer_countdown
+    name: ⏳ Remaining Time
+    icon: mdi:timer-outline
+
+  - type: conditional
+    conditions:
+      - entity: input_boolean.pool_timer_running
+        state: "on"
+    card:
+      type: markdown
+      content: |
+        🟢 **Timer is running...**
+
+  - type: conditional
+    conditions:
+      - entity: input_boolean.pool_timer_done
+        state: "on"
+    card:
+      type: markdown
+      content: |
+        ✅ **Timer finished!**
