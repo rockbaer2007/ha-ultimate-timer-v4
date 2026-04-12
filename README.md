@@ -1,4 +1,4 @@
-# ⏱️ Ultimate Timer V3.2.4 FINAL CLEAN
+# ⏱️ Ultimate Timer V4
 
 [![Open in Home Assistant](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://raw.githubusercontent.com/rockbaer2007/ha-ultimate-timer-blueprint/main/blueprints/automation/ultimate_timer_v3_2_4.yaml)
 
