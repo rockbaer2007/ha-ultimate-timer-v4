@@ -1,0 +1,41 @@
+type: vertical-stack
+cards:
+  - type: entities
+    title: ⏱️ Ultimate Timer V4 Steuerung
+    entities:
+      - entity: input_boolean.pool_timer_start
+        name: ▶️ Timer starten
+      - entity: input_boolean.pool_timer_stop
+        name: ⏹️ Timer stoppen
+
+  - type: entities
+    title: 📊 Status
+    entities:
+      - entity: input_boolean.pool_timer_running
+        name: 🔄 Läuft
+      - entity: input_boolean.pool_timer_done
+        name: ✅ Fertig
+
+  - type: entities
+    title: ⏳ Countdown
+    entities:
+      - entity: sensor.timer_countdown
+        name: ⏱️ Verbleibende Zeit
+
+  - type: conditional
+    conditions:
+      - entity: input_boolean.pool_timer_running
+        state: "on"
+    card:
+      type: markdown
+      content: |
+        🟢 **Timer läuft...**
+
+  - type: conditional
+    conditions:
+      - entity: input_boolean.pool_timer_done
+        state: "on"
+    card:
+      type: markdown
+      content: |
+        ✅ **Timer beendet!**
