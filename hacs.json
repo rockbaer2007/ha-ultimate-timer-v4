@@ -1,0 +1,11 @@
+{
+  "name": "Ultimate Timer V4 (with Countdown)",
+  "content_in_root": false,
+  "filename": "ultimate_timer_v4.yaml",
+  "country": "DE",
+  "homeassistant": "2023.0.0",
+  "render_readme": true,
+  "iot_class": "local_push",
+  "domains": ["automation"],
+  "categories": ["automation"]
+}

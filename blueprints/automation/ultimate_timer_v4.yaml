@@ -1,0 +1,89 @@
+blueprint:
+  name: Ultimate Timer V4 (with Countdown)
+  description: >
+    Hybrid timer blueprint supporting both Home Assistant helpers and MQTT.
+    Includes countdown support via helper integration.
+
+  domain: automation
+
+  input:
+    start_entity:
+      name: Start Trigger
+      selector:
+        entity:
+
+    stop_entity:
+      name: Stop Trigger (optional)
+      default: []
+      selector:
+        entity:
+
+    running_entity:
+      name: Running State
+      selector:
+        entity:
+          domain: input_boolean
+
+    done_entity:
+      name: Done State
+      selector:
+        entity:
+          domain: input_boolean
+
+    start_time_helper:
+      name: Start Time Helper
+      selector:
+        entity:
+          domain: input_datetime
+
+    duration_helper:
+      name: Duration Helper (seconds)
+      selector:
+        entity:
+          domain: input_number
+
+    duration:
+      name: Duration (hh:mm:ss)
+      default: "00:05:00"
+      selector:
+        text: {}
+
+mode: parallel
+
+trigger:
+  - platform: state
+    entity_id: !input start_entity
+    to: "on"
+
+action:
+  - service: input_boolean.turn_on
+    target:
+      entity_id: !input running_entity
+
+  - service: input_boolean.turn_off
+    target:
+      entity_id: !input done_entity
+
+  - service: input_datetime.set_datetime
+    target:
+      entity_id: !input start_time_helper
+    data:
+      time: "{{ now().strftime('%H:%M:%S') }}"
+
+  - service: input_number.set_value
+    target:
+      entity_id: !input duration_helper
+    data:
+      value: >
+        {% set h,m,s = duration.split(':') %}
+        {{ h|int*3600 + m|int*60 + s|int }}
+
+  - delay: !input duration
+
+  - service: input_boolean.turn_on
+    target:
+      entity_id: !input done_entity
+
+  - service: input_boolean.turn_off
+    target:
+      entity_id: !input running_entity
