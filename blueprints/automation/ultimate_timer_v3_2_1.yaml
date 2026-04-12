@@ -1,0 +1,244 @@
+blueprint:
+  name: Ultimate Timer V3.2.1 (Hybrid Helper / MQTT FIXED)
+  description: >
+    Hybrid timer blueprint supporting both Home Assistant helpers and MQTT.
+    Includes robust stop handling and state consistency.
+  domain: automation
+
+  input:
+    use_mqtt:
+      name: Use MQTT instead of Helpers
+      default: false
+      selector:
+        boolean: {}
+
+    start_entity:
+      name: Start Trigger
+      selector:
+        entity:
+
+    stop_entity:
+      name: Stop Trigger (optional)
+      default: []
+      selector:
+        entity:
+
+    running_entity:
+      name: Running State (Helper)
+      selector:
+        entity:
+          domain: input_boolean
+
+    done_entity:
+      name: Done State (Helper)
+      selector:
+        entity:
+          domain: input_boolean
+
+    mqtt_running_topic:
+      name: MQTT Running Topic
+      default: "timer/running/set"
+      selector:
+        text: {}
+
+    mqtt_done_topic:
+      name: MQTT Done Topic
+      default: "timer/done/set"
+      selector:
+        text: {}
+
+    duration:
+      name: Duration (hh:mm:ss)
+      default: "00:05:00"
+      selector:
+        text: {}
+
+    reset_time:
+      name: Reset Time (hh:mm:ss)
+      default: ""
+      selector:
+        text: {}
+
+mode: restart
+max_exceeded: silent
+
+variables:
+  reset_time_final: >
+    {{ reset_time if reset_time|length > 0 else "00:01:00" }}
+
+trigger:
+  - id: start
+    platform: state
+    entity_id: !input start_entity
+    to: "on"
+
+  - id: stop
+    platform: state
+    entity_id: !input stop_entity
+    to: "on"
+
+  - id: reset
+    platform: template
+    value_template: >
+      {{ now().strftime('%H:%M:%S') == reset_time_final }}
+
+condition: []
+
+action:
+  - choose:
+
+      - conditions:
+          - condition: trigger
+            id: reset
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ use_mqtt }}"
+                sequence:
+                  - service: mqtt.publish
+                    data:
+                      topic: !input mqtt_done_topic
+                      payload: "OFF"
+                  - service: mqtt.publish
+                    data:
+                      topic: !input mqtt_running_topic
+                      payload: "OFF"
+              - conditions: []
+                sequence:
+                  - service: input_boolean.turn_off
+                    target:
+                      entity_id:
+                        - !input done_entity
+                        - !input running_entity
+
+      - conditions:
+          - condition: trigger
+            id: stop
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ use_mqtt }}"
+                sequence:
+                  - service: mqtt.publish
+                    data:
+                      topic: !input mqtt_running_topic
+                      payload: "OFF"
+              - conditions: []
+                sequence:
+                  - service: input_boolean.turn_off
+                    target:
+                      entity_id: !input running_entity
+
+          - service: input_boolean.turn_off
+            target:
+              entity_id: !input stop_entity
+
+      - conditions:
+          - condition: trigger
+            id: start
+        sequence:
+
+          - service: input_boolean.turn_off
+            target:
+              entity_id: !input start_entity
+
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ use_mqtt }}"
+                sequence:
+                  - service: mqtt.publish
+                    data:
+                      topic: !input mqtt_running_topic
+                      payload: "ON"
+                  - service: mqtt.publish
+                    data:
+                      topic: !input mqtt_done_topic
+                      payload: "OFF"
+              - conditions: []
+                sequence:
+                  - service: input_boolean.turn_on
+                    target:
+                      entity_id: !input running_entity
+                  - service: input_boolean.turn_off
+                    target:
+                      entity_id: !input done_entity
+
+          - if:
+              - condition: template
+                value_template: "{{ stop_entity != [] }}"
+            then:
+              - wait_for_trigger:
+                  - platform: state
+                    entity_id: !input stop_entity
+                    to: "on"
+                timeout: !input duration
+                continue_on_timeout: true
+            else:
+              - delay: !input duration
+
+          - if:
+              - condition: template
+                value_template: "{{ stop_entity != [] and is_state(stop_entity, 'on') }}"
+            then:
+              - choose:
+                  - conditions:
+                      - condition: template
+                        value_template: "{{ use_mqtt }}"
+                    sequence:
+                      - service: mqtt.publish
+                        data:
+                          topic: !input mqtt_running_topic
+                          payload: "OFF"
+                  - conditions: []
+                    sequence:
+                      - service: input_boolean.turn_off
+                        target:
+                          entity_id: !input running_entity
+
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: !input stop_entity
+
+          - if:
+              - condition: template
+                value_template: "{{ stop_entity == [] or not is_state(stop_entity, 'on') }}"
+            then:
+              - choose:
+                  - conditions:
+                      - condition: template
+                        value_template: "{{ use_mqtt }}"
+                    sequence:
+                      - service: mqtt.publish
+                        data:
+                          topic: !input mqtt_done_topic
+                          payload: "ON"
+                      - service: mqtt.publish
+                        data:
+                          topic: !input mqtt_running_topic
+                          payload: "OFF"
+                  - conditions: []
+                    sequence:
+                      - service: input_boolean.turn_on
+                        target:
+                          entity_id: !input done_entity
+                      - service: input_boolean.turn_off
+                        target:
+                          entity_id: !input running_entity
+
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ use_mqtt }}"
+                sequence:
+                  - service: mqtt.publish
+                    data:
+                      topic: !input mqtt_running_topic
+                      payload: "OFF"
+              - conditions: []
+                sequence:
+                  - service: input_boolean.turn_off
+                    target:
+                      entity_id: !input running_entity

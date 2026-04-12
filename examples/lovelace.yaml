@@ -1,0 +1,35 @@
+type: vertical-stack
+cards:
+  - type: entities
+    title: ⏱️ Timer Control
+    entities:
+      - entity: input_boolean.pool_timer_start
+        name: ▶️ Start Timer
+      - entity: input_boolean.pool_timer_stop
+        name: ⏹️ Stop Timer
+
+  - type: entities
+    title: 📊 Status
+    entities:
+      - entity: input_boolean.pool_timer_running
+        name: 🔄 Running
+      - entity: input_boolean.pool_timer_done
+        name: ✅ Done
+
+  - type: conditional
+    conditions:
+      - entity: input_boolean.pool_timer_running
+        state: "on"
+    card:
+      type: markdown
+      content: |
+        🟢 **Timer is running...**
+
+  - type: conditional
+    conditions:
+      - entity: input_boolean.pool_timer_done
+        state: "on"
+    card:
+      type: markdown
+      content: |
+        ✅ **Timer finished!**
