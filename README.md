@@ -1,48 +1,45 @@
-# ⏱️ Ultimate Timer V4
+# ⏱️ Ultimate Timer V4 (Countdown + stabile Basis)
 
-[![Open in Home Assistant](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://raw.githubusercontent.com/rockbaer2007/ha-ultimate-timer-blueprint/main/blueprints/automation/ultimate_timer_v3_2_4.yaml)
+[![Open in Home Assistant](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://raw.githubusercontent.com/rockbaer2007/ha-ultimate-timer-v4/main/blueprints/automation/ultimate_timer_v4.yaml)
 
-![GitHub release](https://img.shields.io/github/v/release/rockbaer2007/ha-ultimate-timer-blueprint)
-![GitHub stars](https://img.shields.io/github/stars/rockbaer2007/ha-ultimate-timer-blueprint?style=social)
-![HACS](https://img.shields.io/badge/HACS-Custom-blue)
+![GitHub release](https://img.shields.io/github/v/release/rockbaer2007/ha-ultimate-timer-v4)
+![GitHub stars](https://img.shields.io/github/stars/rockbaer2007/ha-ultimate-timer-v4?style=social)
 
-🇩🇪 [German Version](README_de.md)
+🇬🇧 [English Version](README.md)
 
-> A powerful hybrid timer blueprint for Home Assistant with reliable STOP handling, persistent DONE state and MQTT support.
+> Erweiterter Timer Blueprint für Home Assistant mit integriertem Countdown und stabiler Kernlogik.
 
 ---
 
 ## 🚀 Features
 
-- ⏱️ Timer with `hh:mm:ss` format  
-- ▶️ Start trigger (button behavior)  
-- ⏹️ Reliable stop trigger (instant OFF)  
-- 📡 Running state indicator  
-- 🎯 Done state (persistent until reset)  
-- 🌙 Daily reset time  
-- 🔁 Multi-instance safe  
-- 🔀 Hybrid mode (Helper or MQTT)  
-- 🛡️ No race conditions  
+- ⏱️ Timer im Format `hh:mm:ss`  
+- ▶️ Start-Trigger (Taster)  
+- ⏹️ zuverlässiger STOP  
+- 📡 Running Status  
+- 🎯 DONE bleibt aktiv bis Reset  
+- 🌙 täglicher Reset  
+- 🔁 Multi-Instance fähig  
+- 🛡️ keine Race Conditions  
+- ⏳ **integrierter Countdown (NEU in V4)**  
 
 ---
 
-## 🔄 Upgrade Notice
+## 🔄 Upgrade von V3
 
-### V3.2 → V3.2.4 FINAL CLEAN
+### V3 → V4
 
-- Fixed RUNNING state issues  
-- Fixed STOP reliability  
-- DONE now stays ON until reset  
+- Countdown hinzugefügt  
+- Startzeit + Dauer Speicherung  
+- neue Architektur (Logik + Anzeige getrennt)  
 
-👉 Strongly recommended to update
+👉 V3 bleibt stabil – V4 ist die Weiterentwicklung
 
 ---
 
 ## 📦 Installation
 
-### Option 1: Manual
-
-Copy to:
+### Manuell
 
 ```
 config/blueprints/automation/
@@ -50,65 +47,74 @@ config/blueprints/automation/
 
 ---
 
-### Option 2: Import
+### Direkt importieren
 
-[![Open in Home Assistant](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://raw.githubusercontent.com/rockbaer2007/ha-ultimate-timer-blueprint/main/blueprints/automation/ultimate_timer_v3_2_4.yaml)
+[![Open in Home Assistant](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://raw.githubusercontent.com/rockbaer2007/ha-ultimate-timer-v4/main/blueprints/automation/ultimate_timer_v4.yaml)
 
 ---
 
-## ⚙️ Configuration
+## ⚙️ Konfiguration
 
-| Field | Description |
+| Feld | Beschreibung |
 |------|------------|
-| Start Trigger | Starts timer |
-| Stop Trigger | Stops timer |
-| Duration | hh:mm:ss |
-| Running | Active state |
-| Done | Finished state |
-| Reset Time | Daily reset |
+| Start | Timer starten |
+| Stop | Timer stoppen |
+| Dauer | hh:mm:ss |
+| Running | Aktiv |
+| Done | Fertig |
+| Start Time Helper | speichert Startzeit |
+| Duration Helper | speichert Dauer |
+| Reset | täglicher Reset |
 
 ---
 
-## 🧠 How It Works
+## 🧠 Funktionsweise
 
-1. Start → Timer starts  
-2. Running → ON  
-3. Stop → Running OFF immediately  
-4. Timeout → Done = ON  
-5. Reset → everything OFF  
+1. Start → Timer läuft  
+2. Running → EIN  
+3. Countdown startet automatisch  
+4. Stop → sofort AUS  
+5. Ablauf → Done = EIN  
+6. Reset → alles AUS  
 
 ---
-## 📸 Blueprint Configuration
-
-![Blueprint](docs/preview_blueprint.png)
 
 ## 🎥 Demo
 
 ![Demo](docs/demo.gif)
 
-## 📸 Preview
+---
+
+## 📸 Blueprint Konfiguration
+
+![Blueprint](docs/preview_blueprint.png)
+
+---
+
+## 📸 Vorschau
 
 | Idle | Running | Done |
 |------|--------|------|
-| ![Idle](docs/preview_idle1.png) | ![Running](docs/preview_runing1.png) | ![Done](docs/preview_done1.png) |
-| ![Idle](docs/preview_idle2.png) | ![Running](docs/preview_runing2.png) | ![Done](docs/preview_done2.png) |
----
-
-## 💡 Use Cases
-
-- Pump runtime limiter  
-- Irrigation  
-- Watchdog automation  
-- Delayed shutdown  
+| ![Idle](docs/preview_idle.png) | ![Running](docs/preview_running.png) | ![Done](docs/preview_done.png) |
 
 ---
 
-## 📜 License
+## 💡 Einsatz
 
-MIT License
+- Teich / Pool Pumpen  
+- Bewässerung  
+- Watchdog  
+- Verzögerungen  
+- Countdown Anzeige  
+
+---
+
+## 📜 Lizenz
+
+MIT Lizenz
 
 ---
 
 ## ⭐ Support
 
-If you like this project, give it a star ⭐
+Wenn dir das Projekt gefällt, gib ihm ein ⭐
