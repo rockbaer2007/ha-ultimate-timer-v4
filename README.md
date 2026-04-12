@@ -79,6 +79,12 @@ config/blueprints/automation/
 
 ---
 
+## 🖥️ UI (Optional)
+
+See UI setup:
+👉 docs/UI_README_DE.md
+👉 docs/UI_README_EN.md
+
 ## 🎥 Demo
 
 ![Demo](docs/demo.gif)
