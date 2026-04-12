@@ -1,13 +1,13 @@
-# ⏱️ Ultimate Timer V4
+# ⏱️ Ultimate Timer V4 (Countdown + stabile Basis)
 
-[![Open in Home Assistant](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://raw.githubusercontent.com/rockbaer2007/ha-ultimate-timer-blueprint/main/blueprints/automation/ultimate_timer_v3_2_4.yaml)
+[![Open in Home Assistant](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://raw.githubusercontent.com/rockbaer2007/ha-ultimate-timer-v4/main/blueprints/automation/ultimate_timer_v4.yaml)
 
-![GitHub release](https://img.shields.io/github/v/release/rockbaer2007/ha-ultimate-timer-blueprint)
-![GitHub stars](https://img.shields.io/github/stars/rockbaer2007/ha-ultimate-timer-blueprint?style=social)
+![GitHub release](https://img.shields.io/github/v/release/rockbaer2007/ha-ultimate-timer-v4)
+![GitHub stars](https://img.shields.io/github/stars/rockbaer2007/ha-ultimate-timer-v4?style=social)
 
 🇬🇧 [English Version](README.md)
 
-> Leistungsstarker Hybrid-Timer für Home Assistant mit zuverlässiger STOP-Logik, dauerhaftem DONE Status und MQTT Unterstützung.
+> Erweiterter Timer Blueprint für Home Assistant mit integriertem Countdown und stabiler Kernlogik.
 
 ---
 
@@ -15,25 +15,25 @@
 
 - ⏱️ Timer im Format `hh:mm:ss`  
 - ▶️ Start-Trigger (Taster)  
-- ⏹️ STOP funktioniert zuverlässig  
+- ⏹️ zuverlässiger STOP  
 - 📡 Running Status  
 - 🎯 DONE bleibt aktiv bis Reset  
 - 🌙 täglicher Reset  
 - 🔁 Multi-Instance fähig  
-- 🔀 Helper oder MQTT  
 - 🛡️ keine Race Conditions  
+- ⏳ **integrierter Countdown (NEU in V4)**  
 
 ---
 
-## 🔄 Update Hinweis
+## 🔄 Upgrade von V3
 
-### V3.2 → V3.2.4 FINAL CLEAN
+### V3 → V4
 
-- RUNNING Problem behoben  
-- STOP stabilisiert  
-- DONE bleibt jetzt aktiv  
+- Countdown hinzugefügt  
+- Startzeit + Dauer Speicherung  
+- neue Architektur (Logik + Anzeige getrennt)  
 
-👉 Update wird empfohlen
+👉 V3 bleibt stabil – V4 ist die Weiterentwicklung
 
 ---
 
@@ -49,7 +49,7 @@ config/blueprints/automation/
 
 ### Direkt importieren
 
-[![Open in Home Assistant](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://raw.githubusercontent.com/rockbaer2007/ha-ultimate-timer-blueprint/main/blueprints/automation/ultimate_timer_v3_2_4.yaml)
+[![Open in Home Assistant](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://raw.githubusercontent.com/rockbaer2007/ha-ultimate-timer-v4/main/blueprints/automation/ultimate_timer_v4.yaml)
 
 ---
 
@@ -62,7 +62,9 @@ config/blueprints/automation/
 | Dauer | hh:mm:ss |
 | Running | Aktiv |
 | Done | Fertig |
-| Reset | täglich |
+| Start Time Helper | speichert Startzeit |
+| Duration Helper | speichert Dauer |
+| Reset | täglicher Reset |
 
 ---
 
@@ -70,26 +72,30 @@ config/blueprints/automation/
 
 1. Start → Timer läuft  
 2. Running → EIN  
-3. Stop → sofort AUS  
-4. Ablauf → Done = EIN  
-5. Reset → alles AUS  
+3. Countdown startet automatisch  
+4. Stop → sofort AUS  
+5. Ablauf → Done = EIN  
+6. Reset → alles AUS  
 
 ---
-## 📸 Blueprint Configuration
-
-![Blueprint](docs/preview_blueprint.png)
 
 ## 🎥 Demo
 
 ![Demo](docs/demo.gif)
 
+---
+
+## 📸 Blueprint Konfiguration
+
+![Blueprint](docs/preview_blueprint.png)
+
+---
+
 ## 📸 Vorschau
-docs/preview.png
 
 | Idle | Running | Done |
 |------|--------|------|
-| ![Idle](docs/preview_idle1.png) | ![Running](docs/preview_runing1.png) | ![Done](docs/preview_done1.png) |
-| ![Idle](docs/preview_idle2.png) | ![Running](docs/preview_runing2.png) | ![Done](docs/preview_done2.png) |
+| ![Idle](docs/preview_idle.png) | ![Running](docs/preview_running.png) | ![Done](docs/preview_done.png) |
 
 ---
 
@@ -99,6 +105,7 @@ docs/preview.png
 - Bewässerung  
 - Watchdog  
 - Verzögerungen  
+- Countdown Anzeige  
 
 ---
 
