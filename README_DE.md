@@ -71,6 +71,24 @@ input_number:
 
 ---
 
+## 📸 Vorschau
+
+| Idle | Running | Done |
+|------|--------|------|
+| ![Idle](docs/preview_idle.png) | ![Running](docs/preview_running.png) | ![Done](docs/preview_done.png) |
+
+---
+
+## 🎥 Demo
+
+![Demo](docs/demo.gif)
+
+---
+
+## 📸 Blueprint Konfiguration
+
+![Blueprint](docs/preview_blueprint.png)
+
 ## 🧠 Funktionsweise
 
 1. Stunden + Minuten einstellen
