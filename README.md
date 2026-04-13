@@ -1,16 +1,34 @@
-# ⏱️ Ultimate Timer V4 (HH+MM Edition)
+# ⏱️ Ultimate Timer V4 (Countdown + Stable Core)
 
-Advanced timer blueprint for Home Assistant with **stable HH + MM inputs**, countdown and clean UI.
+[![Open in Home Assistant](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://raw.githubusercontent.com/rockbaer2007/ha-ultimate-timer-v4/main/blueprints/automation/ultimate_timer_v4.yaml)
+
+![GitHub release](https://img.shields.io/github/v/release/rockbaer2007/ha-ultimate-timer-v4)
+![GitHub stars](https://img.shields.io/github/stars/rockbaer2007/ha-ultimate-timer-v4?style=social)
+
+> Advanced timer blueprint for Home Assistant with integrated countdown and stable core logic.
+
+---
 
 ## 🚀 Features
 
-- ⏱️ Timer using **hours + minutes helpers**
-- ▶️ Start / ⏹️ Stop
-- 📡 Running + Done states
+- ⏱️ Timer (NEW: HH + MM helper based)
+- ▶️ Start trigger (button)
+- ⏹️ Reliable STOP
+- 📡 Running status
 - 🎯 DONE stays active until reset
+- 🌙 Daily reset
 - 🔁 Multi-instance capable
-- ⏳ Countdown sensor support
-- 🧠 No template parsing issues (stable core)
+- 🛡️ No race conditions
+- ⏳ Integrated countdown (V4)
+
+---
+
+## 🆕 NEW (HH+MM Version)
+
+- Uses input_number (hours + minutes)
+- No template parsing issues
+- No duration selector problems
+- More stable and HA-native approach
 
 ---
 
@@ -20,12 +38,10 @@ Advanced timer blueprint for Home Assistant with **stable HH + MM inputs**, coun
 |------|------------|
 | Start | Start timer |
 | Stop | Stop timer |
-| Hours | input_number (0–10) |
-| Minutes | input_number (0–59, step 5 recommended) |
-| Running | Timer active |
-| Done | Timer finished |
-| Start Time | stores start time |
-| Duration (sec) | calculated automatically |
+| Hours | input_number |
+| Minutes | input_number |
+| Running | Active |
+| Done | Finished |
 
 ---
 
@@ -64,32 +80,11 @@ input_number:
 
 ## 🧠 How it works
 
-1. Set **hours + minutes**
+1. Set hours + minutes
 2. Press Start
-3. Duration is calculated automatically
-4. Countdown runs
-5. Stop = immediate stop
-6. Finished = DONE = ON
-
----
-
-## 🖥️ UI (Mushroom)
-
-- Start / Stop buttons
-- Countdown display
-- Hour + Minute controls
-- Presets (10 min, 30 min, 1h, etc.)
-- Uses `input_number.increment/decrement` (PRO)
-
----
-
-## 💡 Use Cases
-
-- Pool / pond pump
-- Irrigation
-- Delays
-- Watchdog
-- Countdown display
+3. Countdown runs
+4. Stop → immediate OFF
+5. Finished → DONE = ON
 
 ---
 

@@ -1,16 +1,29 @@
-# ⏱️ Ultimate Timer V4 (HH+MM Version)
+# ⏱️ Ultimate Timer V4 (Countdown + stabile Basis)
 
-Erweiterter Timer Blueprint für Home Assistant mit **Stunden + Minuten Eingabe**, Countdown und stabiler Logik.
+🇬🇧 [English Version](README.md)
+
+> Erweiterter Timer Blueprint für Home Assistant mit integriertem Countdown und stabiler Kernlogik.
+
+---
 
 ## 🚀 Features
 
-- ⏱️ Timer mit **Stunden + Minuten**
-- ▶️ Start / ⏹️ Stop
-- 📡 Running + Done Status
+- ⏱️ Timer (NEU: Stunden + Minuten)
+- ▶️ Start-Trigger
+- ⏹️ zuverlässiger STOP
+- 📡 Running Status
 - 🎯 DONE bleibt aktiv bis Reset
+- 🌙 täglicher Reset
 - 🔁 Multi-Instance fähig
-- ⏳ Countdown Anzeige
-- 🧠 keine Template Probleme (stabil)
+- ⏳ Countdown
+
+---
+
+## 🆕 NEU (HH+MM Version)
+
+- Verwendung von input_number (Stunden + Minuten)
+- keine Probleme mit duration Format
+- stabiler als hh:mm:ss
 
 ---
 
@@ -20,12 +33,8 @@ Erweiterter Timer Blueprint für Home Assistant mit **Stunden + Minuten Eingabe*
 |------|------------|
 | Start | Timer starten |
 | Stop | Timer stoppen |
-| Stunden | input_number (0–10) |
-| Minuten | input_number (0–59, Schritt 5 empfohlen) |
-| Running | Aktiv |
-| Done | Fertig |
-| Startzeit | wird gespeichert |
-| Dauer | automatisch berechnet |
+| Stunden | input_number |
+| Minuten | input_number |
 
 ---
 
@@ -66,30 +75,9 @@ input_number:
 
 1. Stunden + Minuten einstellen
 2. Start drücken
-3. Dauer wird automatisch berechnet
-4. Countdown läuft
-5. Stop = sofort AUS
-6. Ablauf = DONE = EIN
-
----
-
-## 🖥️ UI (Mushroom)
-
-- Start / Stop Buttons
-- Countdown Anzeige
-- Stunden + Minuten Steuerung
-- Presets
-- nutzt `increment/decrement` (Profi-Lösung)
-
----
-
-## 💡 Einsatz
-
-- Pool / Teich
-- Bewässerung
-- Verzögerungen
-- Watchdog
-- Countdown Anzeige
+3. Countdown läuft
+4. Stop → sofort AUS
+5. Ablauf → DONE = EIN
 
 ---
 
