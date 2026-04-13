@@ -1,9 +1,9 @@
 blueprint:
-  name: Ultimate Timer V4 (Countdown + Stable Core)
+  name: Ultimate Timer V4 (Countdown + Stable Core FIXED)
   description: >
     Advanced hybrid timer blueprint with integrated countdown support.
 
-    ✔ Based on proven V3 stable logic
+    ✔ Fixed duration handling
     ✔ Countdown support via helpers
     ✔ Reliable STOP handling
     ✔ DONE stays ON until reset
@@ -51,7 +51,7 @@ blueprint:
       name: Duration (hh:mm:ss)
       default: "00:05:00"
       selector:
-        text: {}
+        time: {}
 
     reset_time:
       name: Reset Time (hh:mm:ss)
@@ -119,6 +119,7 @@ action:
 
           # Taster Reset
           - delay: "00:00:01"
+
           - service: input_boolean.turn_off
             target:
               entity_id: !input start_entity
@@ -132,22 +133,23 @@ action:
             target:
               entity_id: !input done_entity
 
-          # 🧠 Countdown Daten speichern
+          # 🧠 Startzeit setzen
           - service: input_datetime.set_datetime
             target:
               entity_id: !input start_time_helper
             data:
               time: "{{ now().strftime('%H:%M:%S') }}"
 
+          # 🔥 FIX: Dauer korrekt berechnen
           - service: input_number.set_value
             target:
               entity_id: !input duration_helper
             data:
               value: >
-                {% set h,m,s = duration.split(':') %}
-                {{ h|int*3600 + m|int*60 + s|int }}
+                {% set t = duration.split(':') %}
+                {{ (t[0]|int * 3600) + (t[1]|int * 60) + (t[2]|int) }}
 
-          # Warten
+          # ⏳ WAIT LOGIC
           - if:
               - condition: template
                 value_template: "{{ stop_entity != [] }}"
@@ -161,7 +163,7 @@ action:
             else:
               - delay: !input duration
 
-          # Entscheidung
+          # 🔚 AUSWERTUNG
           - choose:
 
               # STOP gedrückt
