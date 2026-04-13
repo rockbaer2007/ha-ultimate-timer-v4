@@ -78,22 +78,23 @@ input_number:
 
 ---
 
-  - type: conditional
-    conditions:
-      - entity: input_boolean.timer_running
-        state: "on"
-    card:
-      type: markdown
-      content: |
-        🟢 **Timer is running...**
-  - type: conditional
-    conditions:
-      - entity: input_boolean.timer_done
-        state: "on"
-    card:
-      type: markdown
-      content: |
-        ✅ **Timer finished!**
+ ## 📸 Preview
+
+| Idle | Running | Done |
+|------|--------|------|
+| ![Idle](docs/preview_idle.png) | ![Running](docs/preview_running.png) | ![Done](docs/preview_done.png) |
+
+---
+
+## 🎥 Demo
+
+![Demo](docs/demo.gif)
+
+---
+
+## 📸 Blueprint Configuration
+
+![Blueprint](docs/preview_blueprint.png)
 
 ## 🧠 How it works
 
