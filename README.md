@@ -1,122 +1,98 @@
-# ⏱️ Ultimate Timer V4 (Countdown + Stable Core)
+# ⏱️ Ultimate Timer V4 (HH+MM Edition)
 
-[![Open in Home
-Assistant](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://raw.githubusercontent.com/rockbaer2007/ha-ultimate-timer-v4/main/blueprints/automation/ultimate_timer_v4.yaml)
-
-![GitHub
-release](https://img.shields.io/github/v/release/rockbaer2007/ha-ultimate-timer-v4)
-![GitHub
-stars](https://img.shields.io/github/stars/rockbaer2007/ha-ultimate-timer-v4?style=social)
-
-> Advanced timer blueprint for Home Assistant with integrated countdown
-> and stable core logic.
-
-------------------------------------------------------------------------
+Advanced timer blueprint for Home Assistant with **stable HH + MM inputs**, countdown and clean UI.
 
 ## 🚀 Features
 
--   ⏱️ Timer in `hh:mm:ss` format\
--   ▶️ Start trigger (button)\
--   ⏹️ Reliable STOP\
--   📡 Running status\
--   🎯 DONE stays active until reset\
--   🌙 Daily reset\
--   🔁 Multi-instance capable\
--   🛡️ No race conditions\
--   ⏳ Integrated countdown (NEW in V4)
+- ⏱️ Timer using **hours + minutes helpers**
+- ▶️ Start / ⏹️ Stop
+- 📡 Running + Done states
+- 🎯 DONE stays active until reset
+- 🔁 Multi-instance capable
+- ⏳ Countdown sensor support
+- 🧠 No template parsing issues (stable core)
 
-------------------------------------------------------------------------
-
-## 🔄 Upgrade from V3
-
-### V3 → V4
-
--   Added countdown\
--   Start time + duration storage\
--   New architecture (logic + UI separated)
-
-👉 V3 remains stable -- V4 is the evolution
-
-------------------------------------------------------------------------
-
-## 📦 Installation
-
-### Manual
-
-    config/blueprints/automation/
-
-------------------------------------------------------------------------
-
-### Direct import
-
-[Open in Home
-Assistant](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://raw.githubusercontent.com/rockbaer2007/ha-ultimate-timer-v4/main/blueprints/automation/ultimate_timer_v4.yaml)
-
-------------------------------------------------------------------------
+---
 
 ## ⚙️ Configuration
 
-  Field               Description
-  ------------------- -------------------
-  Start               Start timer
-  Stop                Stop timer
-  Duration            hh:mm:ss
-  Running             Active
-  Done                Finished
-  Start Time Helper   stores start time
-  Duration Helper     stores duration
-  Reset               daily reset
+| Field | Description |
+|------|------------|
+| Start | Start timer |
+| Stop | Stop timer |
+| Hours | input_number (0–10) |
+| Minutes | input_number (0–59, step 5 recommended) |
+| Running | Timer active |
+| Done | Timer finished |
+| Start Time | stores start time |
+| Duration (sec) | calculated automatically |
 
-------------------------------------------------------------------------
+---
 
 ## ⚙️ Required Helpers
 
-    input_boolean:
-      timer_start:
-      timer_stop:
-      timer_running:
-      timer_done:
+```yaml
+input_boolean:
+  timer_start:
+  timer_stop:
+  timer_running:
+  timer_done:
 
-    input_datetime:
-      timer_start_time:
-        has_date: false
-        has_time: true
+input_datetime:
+  timer_start_time:
+    has_date: false
+    has_time: true
 
-    input_number:
-      timer_duration_sec:
-        min: 0
-        max: 86400
-        step: 1
+input_number:
+  timer_hours:
+    min: 0
+    max: 10
+    step: 1
 
-------------------------------------------------------------------------
+  timer_minutes:
+    min: 0
+    max: 59
+    step: 5
+
+  timer_duration_sec:
+    min: 0
+    max: 86400
+    step: 1
+```
+
+---
 
 ## 🧠 How it works
 
-1.  Start → Timer runs\
-2.  Running → ON\
-3.  Countdown starts automatically\
-4.  Stop → immediately OFF\
-5.  Finished → DONE = ON\
-6.  Reset → everything OFF
+1. Set **hours + minutes**
+2. Press Start
+3. Duration is calculated automatically
+4. Countdown runs
+5. Stop = immediate stop
+6. Finished = DONE = ON
 
-------------------------------------------------------------------------
+---
+
+## 🖥️ UI (Mushroom)
+
+- Start / Stop buttons
+- Countdown display
+- Hour + Minute controls
+- Presets (10 min, 30 min, 1h, etc.)
+- Uses `input_number.increment/decrement` (PRO)
+
+---
 
 ## 💡 Use Cases
 
--   Pool / pond pumps\
--   Irrigation\
--   Watchdog\
--   Delays\
--   Countdown display
+- Pool / pond pump
+- Irrigation
+- Delays
+- Watchdog
+- Countdown display
 
-------------------------------------------------------------------------
+---
 
 ## 📜 License
 
-MIT License
-
-------------------------------------------------------------------------
-
-## ⭐ Support
-
-If you like this project, give it a ⭐
+MIT
