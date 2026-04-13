@@ -1,0 +1,5 @@
+# Mushroom UI
+type: vertical-stack
+cards:
+  - type: custom:mushroom-entity-card
+    entity: input_boolean.timer_start

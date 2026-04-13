@@ -1,0 +1,5 @@
+# Mushroom UI PRO
+type: vertical-stack
+cards:
+  - type: custom:mushroom-template-card
+    primary: Pro UI
