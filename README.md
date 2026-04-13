@@ -78,6 +78,23 @@ input_number:
 
 ---
 
+  - type: conditional
+    conditions:
+      - entity: input_boolean.timer_running
+        state: "on"
+    card:
+      type: markdown
+      content: |
+        🟢 **Timer is running...**
+  - type: conditional
+    conditions:
+      - entity: input_boolean.timer_done
+        state: "on"
+    card:
+      type: markdown
+      content: |
+        ✅ **Timer finished!**
+
 ## 🧠 How it works
 
 1. Set hours + minutes
