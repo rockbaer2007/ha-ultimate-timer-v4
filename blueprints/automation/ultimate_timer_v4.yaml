@@ -1,12 +1,11 @@
 blueprint:
-  name: Ultimate Timer V4 (Countdown + Stable Core FIXED)
+  name: Ultimate Timer V4 (HH+MM FINAL)
   description: >
-    Advanced hybrid timer blueprint with integrated countdown support.
+    Timer Blueprint mit Stunden + Minuten Eingabe.
 
-    ✔ Fixed duration handling
-    ✔ Countdown support via helpers
-    ✔ Reliable STOP handling
-    ✔ DONE stays ON until reset
+    ✔ Kein !input Fehler mehr
+    ✔ Stabil mit input_number
+    ✔ Countdown kompatibel
     ✔ Multi-instance safe
 
   domain: automation
@@ -47,24 +46,31 @@ blueprint:
         entity:
           domain: input_number
 
-    duration:
-      name: Duration (hh:mm:ss)
-      default: "00:05:00"
+    duration_hours:
+      name: Stunden (HH)
       selector:
-        time: {}
+        entity:
+          domain: input_number
 
-    reset_time:
-      name: Reset Time (hh:mm:ss)
-      default: ""
+    duration_minutes:
+      name: Minuten (MM)
       selector:
-        text: {}
+        entity:
+          domain: input_number
 
 mode: parallel
 max: 10
 
+##################################
+# 🔥 WICHTIG: INPUT FIX
+##################################
+
 variables:
-  reset_time_final: >
-    {{ reset_time if reset_time|length > 0 else "00:01:00" }}
+  duration_hours_entity: !input duration_hours
+  duration_minutes_entity: !input duration_minutes
+  stop_entity_var: !input stop_entity
+
+##################################
 
 trigger:
   - id: start
@@ -77,28 +83,14 @@ trigger:
     entity_id: !input stop_entity
     to: "on"
 
-  - id: reset
-    platform: template
-    value_template: >
-      {{ now().strftime('%H:%M:%S') == reset_time_final }}
-
 condition: []
 
 action:
   - choose:
 
-      # 🌙 RESET
-      - conditions:
-          - condition: trigger
-            id: reset
-        sequence:
-          - service: input_boolean.turn_off
-            target:
-              entity_id:
-                - !input running_entity
-                - !input done_entity
-
-      # ⏹️ STOP
+      ##################################
+      # ⏹ STOP
+      ##################################
       - conditions:
           - condition: trigger
             id: stop
@@ -111,20 +103,28 @@ action:
             target:
               entity_id: !input stop_entity
 
-      # ▶️ START
+      ##################################
+      # ▶ START
+      ##################################
       - conditions:
           - condition: trigger
             id: start
         sequence:
 
-          # Taster Reset
           - delay: "00:00:01"
 
           - service: input_boolean.turn_off
             target:
               entity_id: !input start_entity
 
-          # Status setzen
+          ##################################
+          # ❗ Nur starten wenn Zeit > 0
+          ##################################
+          - condition: template
+            value_template: >
+              {{ (states(duration_hours_entity)|int +
+                  states(duration_minutes_entity)|int) > 0 }}
+
           - service: input_boolean.turn_on
             target:
               entity_id: !input running_entity
@@ -133,37 +133,50 @@ action:
             target:
               entity_id: !input done_entity
 
-          # 🧠 Startzeit setzen
+          ##################################
+          # 🧠 Startzeit
+          ##################################
           - service: input_datetime.set_datetime
             target:
               entity_id: !input start_time_helper
             data:
               time: "{{ now().strftime('%H:%M:%S') }}"
 
-          # 🔥 FIX: Dauer korrekt berechnen
+          ##################################
+          # 🔥 Dauer berechnen
+          ##################################
+          - variables:
+              duration_seconds: >
+                {{ (states(duration_hours_entity) | int * 3600) +
+                   (states(duration_minutes_entity) | int * 60) }}
+
           - service: input_number.set_value
             target:
               entity_id: !input duration_helper
             data:
-              value: >
-                {% set t = duration.split(':') %}
-                {{ (t[0]|int * 3600) + (t[1]|int * 60) + (t[2]|int) }}
+              value: "{{ duration_seconds }}"
 
-          # ⏳ WAIT LOGIC
+          ##################################
+          # ⏳ WAIT
+          ##################################
           - if:
               - condition: template
-                value_template: "{{ stop_entity != [] }}"
+                value_template: "{{ stop_entity_var != [] }}"
             then:
               - wait_for_trigger:
                   - platform: state
                     entity_id: !input stop_entity
                     to: "on"
-                timeout: !input duration
+                timeout:
+                  seconds: "{{ duration_seconds }}"
                 continue_on_timeout: true
             else:
-              - delay: !input duration
+              - delay:
+                  seconds: "{{ duration_seconds }}"
 
+          ##################################
           # 🔚 AUSWERTUNG
+          ##################################
           - choose:
 
               # STOP gedrückt
